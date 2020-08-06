@@ -1,0 +1,13 @@
+#quote-box {
+  background: lightblue;
+  height: 30vh;
+  width: 40%;
+  margin: 0 auto;
+  color: #000;
+  text-align: center;
+  padding: 1rem;
+}
+#button-container {
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
