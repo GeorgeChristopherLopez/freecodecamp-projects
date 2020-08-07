@@ -1,0 +1,34 @@
+function Editor(props) {
+  
+  return (<section className="editor-section">
+    <div className="editor-container"><div className="editor-header"><span><button>!</button>Editor</span><button className="resizeBtn">X</button></div><textarea onChange={()=> console.log(event.target.value)} id="editor" >
+    this is a test of the emergency broadcast center
+  </textarea>
+  </div>    
+  </section>);
+}
+
+function Preview(props) {
+  return (
+    <div className="preview-container">
+     <div className="preview-header"><span><button>!</button>Preview</span><button className="resizeBtn">X</button></div>
+      <div id="preview"><h1>Markdown</h1></div>
+    </div>
+  );
+}
+
+
+function App() {
+  return (
+    
+      <React.Fragment>
+            <Editor name="Edite" />
+      <Preview/>
+      </React.Fragment>
+  );
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
