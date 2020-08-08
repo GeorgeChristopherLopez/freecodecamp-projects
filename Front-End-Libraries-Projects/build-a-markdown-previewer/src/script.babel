@@ -1,0 +1,67 @@
+function Editor(props) {
+
+  return (<section className="editor-section">
+    <div className="editor-container"><div className="editor-header"><span><button>!</button>Editor</span><button className="resizeBtn">X</button></div><textarea onChange={props.onChange} id="editor" >
+    this is a test of the emergency broadcast center
+  </textarea>
+  </div>    
+  </section>);
+}
+
+function Preview(props) {
+  const text = props.display;
+   function getMarkdownText() {
+    var rawMarkup = marked(text, {sanitize: true});
+    return { __html: rawMarkup };
+  }
+  
+
+  return (
+    <div className="preview-container">
+     <div className="preview-header"><span><button>!</button>Preview</span><button className="resizeBtn">X</button></div>
+      <div id="preview" dangerouslySetInnerHTML={getMarkdownText()} />
+    </div>
+  );
+}
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: "this is a test of the emergency state and props system"
+    };
+    
+     this.handleChange = this.handleChange.bind(this);
+     this.getMarkdownText = this.getMarkdownText.bind(this);
+  }
+  
+
+handleChange() {
+   let mark = this.getMarkdownText();
+   this.setState(state => ({
+      text: event.target.value
+    }));
+   
+  }
+ getMarkdownText() {
+    var rawMarkup = marked('This is _Markdown_.');
+    return { __html: rawMarkup };
+  }
+
+
+  render() {
+    return (
+      <div>
+        <Editor onChange={this.handleChange}/>
+        <Preview display={this.state.text}/>
+      </div>
+    );
+  }
+}
+
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
