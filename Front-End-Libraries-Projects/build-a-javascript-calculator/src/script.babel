@@ -1,0 +1,79 @@
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+function App() {
+  const [input, setInput]= React.useState("0");
+  const [output, setOutput] = React.useState("0");
+  const handleClick = (e) => {
+      console.log(e.target.innerHTML);
+      if(output!=="0")
+      setOutput(output + e.target.innerHTML);
+      else
+          setOutput(e.target.innerHTML);
+  }
+  const handleMath = (e)=>{
+    
+  }
+  
+  const handleClear = (e) =>{
+    setOutput("0");
+  }
+  
+  const handleSpecOp = (e)=>{
+    
+  }
+  
+  const handleDecimal=(e)=>{
+  }
+
+  return (
+    <div id="calculator">
+     <div  id="display">{output}</div>
+            
+      
+      <span>
+ <button className="special_op" onClick={handleClear} id="clear">AC</button>      
+ <button  className="special_op"  onClick={handleSpecOp}id="sign">+/-</button>
+ <button  className="special_op"  onClick={handleSpecOp} id="module">%</button>           
+ <button  className="operator"  onClick={handleMath} id="divide">/</button>
+
+      </span>
+
+      <span>
+ <button onClick={handleClick} id="seven">7</button>      
+ <button onClick={handleClick}id="eight">8</button>
+ <button onClick={handleClick} id="nine">9</button>           
+ <button  className="operator"  onClick={handleMath} id="multiply">x</button>
+
+      </span>
+      <span>
+ <button onClick={handleClick} id="four">4</button>      
+<button onClick={handleClick} id="five">5</button>
+ <button onClick={handleClick} id="six">6</button>           
+              <button  className="operator"  onClick={handleMath} id="subtract">-</button>
+
+      </span>
+      <span>
+ <button onClick={handleClick} id="one">1</button>      <button onClick={handleClick} id="two">2</button>
+ <button  onClick={handleClick} id="three">3</button>           
+ <button  className="operator" onClick={handleSpecOp} id="add">+</button>
+
+      </span>
+            <span className="equals_row">
+              <span className="zero_row">
+              <button  onClick={handleClick} id="zero">0</button>
+              </span>
+                <span className="equals_row">
+              <button onClick={handleDecimal} id="decimal">.</button>
+              <button  className="operator"  onClick={handleMath}  id="equals" onClick={handleMath}>=</button>
+              </span>
+      </span>
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
