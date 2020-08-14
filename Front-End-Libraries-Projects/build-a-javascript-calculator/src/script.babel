@@ -1,29 +1,56 @@
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-
 function App() {
-  const [input, setInput]= React.useState("0");
+  const [input, setInput]= React.useState(null);
+  const [runningTotal, setTotal]= React.useState(0);
   const [output, setOutput] = React.useState("0");
+  const [operator, setOperator] = React.useState("");
+  
   const handleClick = (e) => {
-      console.log(e.target.innerHTML);
-      if(output!=="0")
-      setOutput(output + e.target.innerHTML);
-      else
-          setOutput(e.target.innerHTML);
+         
+        if(output!=="0"){
+          setOutput(output + e.target.innerHTML);
+          
+        } else {
+          setOutput(e.target.innerHTML);  
+        
+        } 
   }
+  
   const handleMath = (e)=>{
+     setOperator(e.target.innerHTML);
+    console.log(output[output.length-1]);
+    console.log(output.substring(0, output.length));
+   
+    if(isNaN(parseInt(output[output.length-1]))){
+    
+      setOutput(output.substring(0, output.length-1) + e.target.innerHTML); 
+      
+
+    } else if(output=="0") {
+        
+       setOutput(e.target.innerHTML);
+
+    } else {
+      setOutput(output + e.target.innerHTML);
+    }
     
   }
   
   const handleClear = (e) =>{
     setOutput("0");
+    setInput(0);
+    setTotal(0);
+    setOperator("");
   }
   
   const handleSpecOp = (e)=>{
     
   }
-  
+  const handleEquals = (e)=>{
+     let dataArr = output.split(/[+-/x%]/);
+     let operators = output.replace(/\d+/g, '');
+     operators = operators.split('');
+     console.log(dataArr, operators);
+  }
   const handleDecimal=(e)=>{
   }
 
@@ -57,7 +84,7 @@ function App() {
       <span>
  <button onClick={handleClick} id="one">1</button>      <button onClick={handleClick} id="two">2</button>
  <button  onClick={handleClick} id="three">3</button>           
- <button  className="operator" onClick={handleSpecOp} id="add">+</button>
+ <button  className="operator" onClick={handleMath} id="add">+</button>
 
       </span>
             <span className="equals_row">
@@ -66,7 +93,7 @@ function App() {
               </span>
                 <span className="equals_row">
               <button onClick={handleDecimal} id="decimal">.</button>
-              <button  className="operator"  onClick={handleMath}  id="equals" onClick={handleMath}>=</button>
+              <button  className="operator"   id="equals" onClick={handleEquals}>=</button>
               </span>
       </span>
     </div>

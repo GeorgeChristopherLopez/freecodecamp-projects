@@ -1,29 +1,56 @@
-function Welcome(props) {
-  return React.createElement("h1", null, "Hello, ", props.name);
-}
-
 function App() {
-  const [input, setInput] = React.useState("0");
+  const [input, setInput] = React.useState(null);
+  const [runningTotal, setTotal] = React.useState(0);
   const [output, setOutput] = React.useState("0");
-  const handleClick = e => {
-    console.log(e.target.innerHTML);
-    if (output !== "0")
-    setOutput(output + e.target.innerHTML);else
+  const [operator, setOperator] = React.useState("");
 
-    setOutput(e.target.innerHTML);
+  const handleClick = e => {
+
+    if (output !== "0") {
+      setOutput(output + e.target.innerHTML);
+
+    } else {
+      setOutput(e.target.innerHTML);
+
+    }
   };
+
   const handleMath = e => {
+    setOperator(e.target.innerHTML);
+    console.log(output[output.length - 1]);
+    console.log(output.substring(0, output.length));
+
+    if (isNaN(parseInt(output[output.length - 1]))) {
+
+      setOutput(output.substring(0, output.length - 1) + e.target.innerHTML);
+
+
+    } else if (output == "0") {
+
+      setOutput(e.target.innerHTML);
+
+    } else {
+      setOutput(output + e.target.innerHTML);
+    }
 
   };
 
   const handleClear = e => {
     setOutput("0");
+    setInput(0);
+    setTotal(0);
+    setOperator("");
   };
 
   const handleSpecOp = e => {
 
   };
-
+  const handleEquals = e => {
+    let dataArr = output.split(/[+-/x%]/);
+    let operators = output.replace(/\d+/g, '');
+    operators = operators.split('');
+    console.log(dataArr, operators);
+  };
   const handleDecimal = e => {
   };
 
@@ -57,7 +84,7 @@ function App() {
     React.createElement("span", null,
     React.createElement("button", { onClick: handleClick, id: "one" }, "1"), "      ", React.createElement("button", { onClick: handleClick, id: "two" }, "2"),
     React.createElement("button", { onClick: handleClick, id: "three" }, "3"),
-    React.createElement("button", { className: "operator", onClick: handleSpecOp, id: "add" }, "+")),
+    React.createElement("button", { className: "operator", onClick: handleMath, id: "add" }, "+")),
 
 
     React.createElement("span", { className: "equals_row" },
@@ -66,7 +93,7 @@ function App() {
 
     React.createElement("span", { className: "equals_row" },
     React.createElement("button", { onClick: handleDecimal, id: "decimal" }, "."),
-    React.createElement("button", { className: "operator", onClick: handleMath, id: "equals", onClick: handleMath }, "=")))));
+    React.createElement("button", { className: "operator", id: "equals", onClick: handleEquals }, "=")))));
 
 
 
