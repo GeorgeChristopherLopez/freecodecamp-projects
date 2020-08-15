@@ -21,14 +21,14 @@ function App() {
     console.log(output.substring(0, output.length));
 
     if (isNaN(parseInt(output[output.length - 1]))) {
+      if (e.target.innerHTML == "-")
+      console.log('make it negative');
 
       setOutput(output.substring(0, output.length - 1) + e.target.innerHTML);
 
 
     } else if (output == "0") {
-
-      setOutput(e.target.innerHTML);
-
+      // do nothing
     } else {
       setOutput(output + e.target.innerHTML);
     }
@@ -46,10 +46,32 @@ function App() {
 
   };
   const handleEquals = e => {
-    let dataArr = output.split(/[+-/x%]/);
-    let operators = output.replace(/\d+/g, '');
-    operators = operators.split('');
-    console.log(dataArr, operators);
+    let data = output.split(/[+-/x%]/);
+    let ops = output.replace(/\d+/g, '');
+    ops = ops.split('');
+    let sum = parseInt(data[0]);
+    let j = 0;
+    for (let i = 1; i < data.length; i++) {
+      console.log(data[i], ops[i - 1]);
+      if (ops[i - 1] == "+" && !isNaN(parseInt(data[i])))
+      sum = sum + parseInt(data[i]);
+      if (ops[i - 1] == "x" && !isNaN(parseInt(data[i])))
+      sum = sum * parseInt(data[i]);
+      if (ops[i - 1] == "/" && !isNaN(parseInt(data[i])))
+      sum = sum / parseInt(data[i]);
+      if (ops[i - 1] == "-" && !isNaN(parseInt(data[i])))
+      sum = sum - parseInt(data[i]);
+
+
+    }
+    console.log("operators:" +
+    ops);
+    console.log("data:" + data);
+
+    setOutput(sum.toString());
+    setInput(0);
+    setTotal(0);
+    setOperator("");
   };
   const handleDecimal = e => {
   };
