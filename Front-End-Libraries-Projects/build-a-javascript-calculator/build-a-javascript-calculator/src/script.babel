@@ -4,45 +4,70 @@ function App() {
   const [output, setOutput] = React.useState("0");
   const [prevOp, setPrevOp] = React.useState("");
     const [nextNegative, setNextNegative] = React.useState(false);
-  const handleClick = (e) => {   
-          
-
-    if(output=="0" || isNaN(parseInt(output))&& !nextNegative){
+  
+  
+  
+  const handleClick = (e) => {  
+    
+      if(output=="0" || isNaN(parseInt(output)) && !nextNegative){
+       // handleMath()
       setOutput(e.target.innerHTML);  
       setInput(parseInt(e.target.innerHTML));
-    } else if (isNaN(parseInt(output))) { 
-      handleMath();
-      setOutput(e.target.innerHTML);  
-      setInput(parseInt(e.target.innerHTML));
-    } else {
+        
+     }  else if( isNaN(parseInt(output[output.length-1])) && nextNegative) {
+     //   handleMath();
       setOutput(output + e.target.innerHTML);
       setInput(parseInt(output+e.target.innerHTML));
+     } else {
+      setOutput(output + e.target.innerHTML);
+      setInput(parseFloat(output+e.target.innerHTML)); 
+      console.log(input);
     } 
 
-
+    console.log(e.target.innerHTML, total)
   }
   
   const handleOp = (e)=>{
+    console.log("previous is NUMBER"+ !isNaN(parseInt(output)))
+    console.log("previous operator is: " + prevOp)
+    console.log("previous input is: " + input)
     if(e.target.innerHTML=="-" && isNaN(parseInt(output))){
-            setNextNegative(true);    
-    } else {
-            setNextNegative(false);
-           
-            if(prevOp == ""){
-              setInput(parseInt(output));
-              setTotal(parseInt(output));
+      setNextNegative(true);    
+    } else if(prevOp == "") {
+      setNextNegative(false);
+      setInput(parseFloat(output));
+      setTotal(parseFloat(output));
+      setPrevOp(e.target.innerHTML);  
+          
+    } else if (!isNaN(parseInt(output))) {
+      setNextNegative(false);
+      console.log("do math now????")
+      let res = 0.0;
 
-            }
-       setPrevOp(e.target.innerHTML);
-    }
+      if(prevOp == "+"){
+        res = total + input;     
+      } else if (prevOp == "-"){
+        res = total - input;
+      } else if (prevOp == "/"){
+        res = total / input;
+      } else if (prevOp == "x"){
+        res = total * input;
+      }
     
-    setOutput(e.target.innerHTML); 
-   
+      setTotal(res);
+      setPrevOp(e.target.innerHTML);  
+    } else {
+      setNextNegative(false);
+        setPrevOp(e.target.innerHTML);  
+    }
+ 
   
-      
+    setOutput(e.target.innerHTML); 
+    
+
   }
   
-  const handleMath = () =>{
+  let handleMath = function () {
  
  
     let res = 0;
@@ -60,7 +85,7 @@ function App() {
     setTotal(res);
     setInput("");
     
-
+console.log(e.target.innerHTML, total)
   }
   const handleClear = (e) =>{
     setInput(0);
@@ -101,7 +126,11 @@ function App() {
   }
 
   const handleDecimal=(e)=>{
-  
+      if(!output.includes(".") && !isNaN(parseInt(output))){
+        setOutput(output+".")
+      } else if(isNaN(parseInt(output))) {
+        setOutput("0.")
+      }
   }
 
   return (
