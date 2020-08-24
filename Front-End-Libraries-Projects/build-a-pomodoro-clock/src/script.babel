@@ -1,0 +1,81 @@
+function App() {
+  const [sessionLength, setSessionLength] = React.useState(25);
+  const [breakLength, setBreakLength] = React.useState(5);
+  const[timeLeft, setTimeLeft] = React.useState((sessionLength * 60));
+  const [onBreak, setOnBreak] = React.useState(false);
+  const [running, setRunning] = React.useState(false);
+  
+  const  format = (time)=>{
+    let min = Math.trunc(time / 60);
+    let sec = time % 60;
+    return time;
+  }
+
+  const reset =()=>{
+    setRunning (false);
+    setSessionLength(25);
+    setBreakLength(5);
+    setOnBreak(false);
+    setTimeLeft(25*60);
+    
+  }
+
+  const labelHanlder = (command)=>{
+    console.log(command);
+    if(command =="session-increment"){
+      if(sessionLength < 60)
+        setSessionLength(sessionLength+1);
+    }
+    if(command == "session-decrement"){
+      if(sessionLength > 1)
+        setSessionLength(sessionLength-1);
+    }
+    if(command =="break-increment"){
+      if(breakLength < 60)
+        setBreakLength(breakLength+1);
+    }
+    if(command == "break-decrement"){
+      if(breakLength > 1)
+        setBreakLength(breakLength-1);
+    } 
+
+  }
+  
+  const start_stop = () =>{
+   setRunning(!running)
+  }
+  
+  
+  return(
+
+    <main>
+    
+      <h1>Pomodoro Clock</h1>
+      <div id ="break-session-container">
+  <div id="break-label">
+     <a id="break-increment"  onClick={()=> labelHanlder("break-increment")}>+</a>
+    <a id="break-length" >{breakLength}</a>
+      <a id="break-decrement" onClick={()=> labelHanlder("break-decrement")}>-</a>
+  </div>
+  <div id="session-label">
+     <a id="session-increment" onClick={()=> labelHanlder("session-increment")}>+</a>
+    <a id="session-length">{sessionLength}</a>
+      <a id="session-decrement" onClick={()=> labelHanlder("session-decrement")}>-</a>
+  </div>
+      </div>
+  <div id="timer-container">
+    <h5 id="timer-label">{onBreak ? "Break" : "Session"}</h5>
+    <h1 id="time-left">{ timeLeft}</h1>
+      
+  </div>
+      <div id="controler">
+        <a id="start_stop" onClick={start_stop}>start_stop</a>
+        <a id="reset" onClick={reset}>reset</a>
+      </div>
+      {running ? console.log(running) : <p>not running</p>}
+    </main>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+

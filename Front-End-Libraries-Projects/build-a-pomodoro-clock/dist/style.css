@@ -1,0 +1,45 @@
+body{
+  background: #0EF40E;
+}
+
+#controler{
+  display: linear-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#controler a {
+  margin : 1rem;
+}
+
+#break-session-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+}
+
+#timer-container{
+  text-align: center;
+  margin: 0 auto;
+}
+
+#session-label, #break-label{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  margin: 0 auto;
+  text-align: center;
+  grid-gap: 2rem;
+}
+
+#time-left{
+  background: #000;
+  color: red;
+  height: 100px;
+  width:  200px;
+  margin: auto;
+  
+}
+
+a{
+  cursor: pointer;
+}
