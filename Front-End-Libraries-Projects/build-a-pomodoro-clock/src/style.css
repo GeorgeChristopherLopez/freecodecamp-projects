@@ -1,5 +1,6 @@
 body{
-  background: #0EF40E;
+  background: #000;
+  color: white;
 }
 
 #controler{
@@ -25,15 +26,16 @@ body{
 
 #session-label, #break-label{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   margin: 0 auto;
   text-align: center;
   grid-gap: 2rem;
+  border: 1px solid white;
+  padding: 1rem;
 }
 
 #time-left{
-  background: #000;
-  color: red;
+  font-size: 50px;
   height: 100px;
   width:  200px;
   margin: auto;
@@ -42,4 +44,13 @@ body{
 
 a{
   cursor: pointer;
+  border: 1px solid white;
+  border-radius: 100%;
+  padding: 1rem 1rem;
+}
+
+p{
+  font-size: 2rem;
+  padding: 0;
+  margin: 0;
 }

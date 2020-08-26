@@ -5,10 +5,15 @@ function App() {
   const [onBreak, setOnBreak] = React.useState(false);
   const [running, setRunning] = React.useState(false);
   
+
+   
   const  format = (time)=>{
     let min = Math.trunc(time / 60);
     let sec = time % 60;
-    return time;
+    if(sec < 10){
+      sec = "0"+sec;
+    }
+    return min +":" +sec;
   }
 
   const reset =()=>{
@@ -21,14 +26,18 @@ function App() {
   }
 
   const labelHanlder = (command)=>{
-    console.log(command);
+    
     if(command =="session-increment"){
-      if(sessionLength < 60)
+      if(sessionLength < 60){
         setSessionLength(sessionLength+1);
+        setTimeLeft((sessionLength+1)*60)
+      }
     }
     if(command == "session-decrement"){
-      if(sessionLength > 1)
+      if(sessionLength > 1){
         setSessionLength(sessionLength-1);
+        setTimeLeft((sessionLength-1)*60)
+      }
     }
     if(command =="break-increment"){
       if(breakLength < 60)
@@ -38,12 +47,30 @@ function App() {
       if(breakLength > 1)
         setBreakLength(breakLength-1);
     } 
-
+    if(onBreak){
+      setTimeLeft(sessionLength)
+    }
   }
   
   const start_stop = () =>{
-   setRunning(!running)
+  setRunning (!running);
   }
+  
+ React.useEffect(() => {
+    let interval = null;
+    if (running && timeLeft !== 0 ) {
+      interval = setInterval(() => {
+        setTimeLeft(timeLeft => timeLeft - 1);
+      }, 1000);
+    } else if (!running && timeLeft !== 0) {
+      clearInterval(interval);
+    } else if (running && timeLeft == 0 && !onBreak){
+      setOnBreak(true);
+      setTimeLeft(breakLength*60);
+    } 
+    return () => clearInterval(interval);
+  }, [running, timeLeft]);
+
   
   
   return(
@@ -53,26 +80,26 @@ function App() {
       <h1>Pomodoro Clock</h1>
       <div id ="break-session-container">
   <div id="break-label">
-     <a id="break-increment"  onClick={()=> labelHanlder("break-increment")}>+</a>
-    <a id="break-length" >{breakLength}</a>
-      <a id="break-decrement" onClick={()=> labelHanlder("break-decrement")}>-</a>
+     <a id="break-increment"  onClick={()=> !running ? labelHanlder("break-increment"): null}>+</a>
+    <p id="break-length" >{breakLength}</p>
+      <a id="break-decrement" onClick={()=> !running ?labelHanlder("break-decrement"): null}>-</a>
   </div>
   <div id="session-label">
-     <a id="session-increment" onClick={()=> labelHanlder("session-increment")}>+</a>
-    <a id="session-length">{sessionLength}</a>
-      <a id="session-decrement" onClick={()=> labelHanlder("session-decrement")}>-</a>
+     <a id="session-increment" onClick={()=> !running ?labelHanlder("session-increment"): null}>+</a>
+    <p id="session-length">{sessionLength}</p>
+      <a id="session-decrement" onClick={()=> !running ? labelHanlder("session-decrement"):null}>-</a>
   </div>
       </div>
   <div id="timer-container">
     <h5 id="timer-label">{onBreak ? "Break" : "Session"}</h5>
-    <h1 id="time-left">{ timeLeft}</h1>
+    <h1 id="time-left">{ format(timeLeft)}</h1>
       
   </div>
       <div id="controler">
         <a id="start_stop" onClick={start_stop}>start_stop</a>
         <a id="reset" onClick={reset}>reset</a>
       </div>
-      {running ? console.log(running) : <p>not running</p>}
+     
     </main>
   );
 }

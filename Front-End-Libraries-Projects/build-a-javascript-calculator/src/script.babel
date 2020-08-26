@@ -1,79 +1,136 @@
 function App() {
-  const [input, setInput]= React.useState(null);
-  const [runningTotal, setTotal]= React.useState(0);
+  const [input, setInput]= React.useState(0);
+  const [total, setTotal]= React.useState(0);
   const [output, setOutput] = React.useState("0");
-  const [operator, setOperator] = React.useState("");
+  const [prevOp, setPrevOp] = React.useState("");
+    const [nextNegative, setNextNegative] = React.useState(false);
   
-  const handleClick = (e) => {
-         
-        if(output!=="0"){
-          setOutput(output + e.target.innerHTML);
-          
-        } else {
-          setOutput(e.target.innerHTML);  
+  
+  
+  const handleClick = (e) => {  
+    
+      if(output=="0" || isNaN(parseInt(output)) && !nextNegative){
+       // handleMath()
+      setOutput(e.target.innerHTML);  
+      setInput(parseInt(e.target.innerHTML));
         
-        } 
+     }  else if( isNaN(parseInt(output[output.length-1])) && nextNegative) {
+     //   handleMath();
+      setOutput(output + e.target.innerHTML);
+      setInput(parseInt(output+e.target.innerHTML));
+     } else {
+      setOutput(output + e.target.innerHTML);
+      setInput(parseFloat(output+e.target.innerHTML)); 
+      console.log(input);
+    } 
+
+    console.log(e.target.innerHTML, total)
   }
   
-  const handleMath = (e)=>{
-     setOperator(e.target.innerHTML);
-    console.log(output[output.length-1]);
-    console.log(output.substring(0, output.length));
-   
-    if(isNaN(parseInt(output[output.length-1]))){
-     if(e.target.innerHTML=="-")
-       console.log('make it negative');
-       
-      setOutput(output.substring(0, output.length-1) + e.target.innerHTML); 
-      
+  const handleOp = (e)=>{
+    console.log("previous is NUMBER"+ !isNaN(parseInt(output)))
+    console.log("previous operator is: " + prevOp)
+    console.log("previous input is: " + input)
+    if(e.target.innerHTML=="-" && isNaN(parseInt(output))){
+      setNextNegative(true);    
+    } else if(prevOp == "") {
+      setNextNegative(false);
+      setInput(parseFloat(output));
+      setTotal(parseFloat(output));
+      setPrevOp(e.target.innerHTML);  
+          
+    } else if (!isNaN(parseInt(output))) {
+      setNextNegative(false);
+      console.log("do math now????")
+      let res = 0.0;
 
-    } else if(output=="0") {
-        // do nothing
+      if(prevOp == "+"){
+        res = total + input;     
+      } else if (prevOp == "-"){
+        res = total - input;
+      } else if (prevOp == "/"){
+        res = total / input;
+      } else if (prevOp == "x"){
+        res = total * input;
+      }
+    
+      setTotal(res);
+      setPrevOp(e.target.innerHTML);  
     } else {
-      setOutput(output + e.target.innerHTML);
+      setNextNegative(false);
+        setPrevOp(e.target.innerHTML);  
+    }
+ 
+  
+    setOutput(e.target.innerHTML); 
+    
+
+  }
+  
+  let handleMath = function () {
+ 
+ 
+    let res = 0;
+    
+    if(prevOp == "+"){
+           res = total + input;     
+    } else if (prevOp == "-"){
+           res = total - input;
+    } else if (prevOp == "/"){
+       res = total / input;
+    } else if (prevOp == "x"){
+       res = total * input;
     }
     
+    setTotal(res);
+    setInput("");
+    
+console.log(e.target.innerHTML, total)
   }
-  
   const handleClear = (e) =>{
-    setOutput("0");
     setInput(0);
+    setOutput("0");
     setTotal(0);
-    setOperator("");
+    setPrevOp("");
   }
   
   const handleSpecOp = (e)=>{
     
   }
+  
   const handleEquals = (e)=>{
-     let data = output.split(/[+-/x%]/);
-     let ops = output.replace(/\d+/g, '');
-     ops = ops.split('');
-      let sum = parseInt(data[0]);
-      let j = 0;
-      for(let i= 1; i < data.length; i++){
-        console.log(data[i], ops[i-1]);
-        if(ops[i-1]=="+" && !isNaN(parseInt(data[i])))
-          sum = sum + parseInt(data[i]);
-        if(ops[i-1]=="x" && !isNaN(parseInt(data[i])))
-          sum = sum * parseInt(data[i]);
-        if(ops[i-1]=="/" && !isNaN(parseInt(data[i])))
-          sum = sum / parseInt(data[i]);
-        if(ops[i-1]=="-" && !isNaN(parseInt(data[i])))
-          sum = sum - parseInt(data[i]);
-        
-
-      }
-     console.log("operators:"
-+ops);
-     console.log("data:"+data);
     
-     setOutput(sum.toString());
-     setInput(0);
-    setTotal(0);
-    setOperator("");
+    if(isNaN(parseInt(output))){
+
+      setOutput(total.toString());
+      
+    } else {
+          let res = 0;
+
+          if(prevOp == "+"){
+            res = total + input;     
+          } else if (prevOp == "-"){
+            res = total - input;
+          } else if (prevOp == "/"){
+            res = total / input;
+          } else if (prevOp == "x"){
+            res = total * input;
+          }
+
+          setOutput(res.toString());
+          setTotal();
+          setInput("");
+          setPrevOp("")
+    }
+   
   }
+
   const handleDecimal=(e)=>{
+      if(!output.includes(".") && !isNaN(parseInt(output))){
+        setOutput(output+".")
+      } else if(isNaN(parseInt(output))) {
+        setOutput("0.")
+      }
   }
 
   return (
@@ -85,7 +142,7 @@ function App() {
  <button className="special_op" onClick={handleClear} id="clear">AC</button>      
  <button  className="special_op"  onClick={handleSpecOp}id="sign">+/-</button>
  <button  className="special_op"  onClick={handleSpecOp} id="module">%</button>           
- <button  className="operator"  onClick={handleMath} id="divide">/</button>
+ <button  className="operator"  onClick={handleOp} id="divide">/</button>
 
       </span>
 
@@ -93,20 +150,20 @@ function App() {
  <button onClick={handleClick} id="seven">7</button>      
  <button onClick={handleClick}id="eight">8</button>
  <button onClick={handleClick} id="nine">9</button>           
- <button  className="operator"  onClick={handleMath} id="multiply">x</button>
+ <button  className="operator"  onClick={handleOp} id="multiply">x</button>
 
       </span>
       <span>
  <button onClick={handleClick} id="four">4</button>      
 <button onClick={handleClick} id="five">5</button>
  <button onClick={handleClick} id="six">6</button>           
-              <button  className="operator"  onClick={handleMath} id="subtract">-</button>
+              <button  className="operator"  onClick={handleOp} id="subtract">-</button>
 
       </span>
       <span>
  <button onClick={handleClick} id="one">1</button>      <button onClick={handleClick} id="two">2</button>
  <button  onClick={handleClick} id="three">3</button>           
- <button  className="operator" onClick={handleMath} id="add">+</button>
+ <button  className="operator" onClick={handleOp} id="add">+</button>
 
       </span>
             <span className="equals_row">
