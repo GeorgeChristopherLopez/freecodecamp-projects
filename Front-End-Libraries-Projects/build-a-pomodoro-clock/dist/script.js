@@ -6,12 +6,14 @@ function App() {
   const [running, setRunning] = React.useState(false);
 
 
-
   const format = time => {
     let min = Math.trunc(time / 60);
     let sec = time % 60;
     if (sec < 10) {
       sec = "0" + sec;
+    }
+    if (min < 10) {
+      min = "0" + min;
     }
     return min + ":" + sec;
   };
@@ -67,7 +69,11 @@ function App() {
     } else if (running && timeLeft == 0 && !onBreak) {
       setOnBreak(true);
       setTimeLeft(breakLength * 60);
+    } else if (running && timeLeft == 0 && onBreak) {
+      setOnBreak(false);
+      setTimeLeft(sessionLength * 60);
     }
+
     return () => clearInterval(interval);
   }, [running, timeLeft]);
 
@@ -96,8 +102,8 @@ function App() {
 
 
     React.createElement("div", { id: "controler" },
-    React.createElement("a", { id: "start_stop", onClick: start_stop }, "start_stop"),
-    React.createElement("a", { id: "reset", onClick: reset }, "reset"))));
+    React.createElement("button", { id: "start_stop", onClick: start_stop }, "start_stop"),
+    React.createElement("button", { id: "reset", onClick: reset }, "reset"))));
 
 
 
