@@ -18,14 +18,6 @@ function App() {
     return min + ":" + sec;
   };
 
-  const reset = () => {
-    setRunning(false);
-    setSessionLength(25);
-    setBreakLength(5);
-    setOnBreak(false);
-    setTimeLeft(25 * 60);
-
-  };
 
   const labelHanlder = command => {
 
@@ -57,6 +49,24 @@ function App() {
   const start_stop = () => {
     setRunning(!running);
   };
+  const playAudio = e => {
+    document.getElementById(e).play();
+
+  };
+  const resetAudio = e => {
+    document.getElementById(e).pause();
+    document.getElementById(e).currentTime = 0;
+  };
+
+  const reset = () => {
+    setRunning(false);
+    setSessionLength(25);
+    setBreakLength(5);
+    setOnBreak(false);
+    setTimeLeft(25 * 60);
+    resetAudio("beep");
+  };
+
 
   React.useEffect(() => {
     let interval = null;
@@ -68,9 +78,11 @@ function App() {
       clearInterval(interval);
     } else if (running && timeLeft == 0 && !onBreak) {
       setOnBreak(true);
+      playAudio("beep");
       setTimeLeft(breakLength * 60);
     } else if (running && timeLeft == 0 && onBreak) {
       setOnBreak(false);
+      playAudio("beep");
       setTimeLeft(sessionLength * 60);
     }
 
@@ -103,7 +115,12 @@ function App() {
 
     React.createElement("div", { id: "controler" },
     React.createElement("button", { id: "start_stop", onClick: start_stop }, "start_stop"),
-    React.createElement("button", { id: "reset", onClick: reset }, "reset"))));
+    React.createElement("button", { id: "reset", onClick: reset }, "reset")),
+
+    React.createElement("audio", {
+      id: "beep",
+      preload: "auto",
+      src: "https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav" })));
 
 
 
